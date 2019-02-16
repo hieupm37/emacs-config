@@ -1,0 +1,172 @@
+#+TITLE: Emacs configuration
+#+AUTHOR: Hieu Phan
+
+* How to use
+
+* Add package repositories
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+#+END_SRC
+
+* Security
+Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html][Your Text Editor Is Malware]].
+** Check TLS
+#+BEGIN_SRC emacs-lisp
+(setq tls-checktrust t)
+(setq gnutls-verify-error t)
+#+END_SRC
+
+* Automatic installing packages
+** Install =use-package= and its dependencies if needed
+#+BEGIN_SRC emacs-lisp
+(mapc
+  (lambda (package)
+    (if (not (package-installed-p package))
+      (progn
+        (package-refresh-contents)
+        (package-install package))))
+  '(use-package diminish bind-key))
+#+END_SRC
+** Trigger =use-package= and force the install of missing packages
+#+BEGIN_SRC emacs-lisp
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-always-ensure t)
+#+END_SRC
+
+* Configure Evil mode
+#+BEGIN_SRC emacs-lisp
+(use-package evil :ensure t
+  :diminish evil-mode
+  :config
+  (evil-mode 1))
+#+END_SRC
+
+* Configure Ivy
+#+BEGIN_SRC emacs-lisp
+(use-package ivy :ensure t
+  :config
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers  t)
+  (setq enable-recrusive-minibuffers t))
+#+END_SRC
+
+* Required packages
+** =which-key= package key navigation
+#+BEGIN_SRC emacs-lisp
+(use-package which-key :ensure t)
+#+END_SRC
+** =counsel= package for completion
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+  :commands
+  (counsel-M-x))
+#+END_SRC
+** =winum= to navigate between windows by number (SPC 1)
+#+BEGIN_SRC emacs-lisp
+(use-package winum :ensure t
+  :config
+  (winum-mode))
+#+END_SRC
+
+* Binding keys
+#+BEGIN_SRC emacs-lisp
+(use-package general :ensure t
+  :config
+  (general-define-key
+    :states '(normal visual insert emacs)
+    :prefix "SPC"
+    :non-normal-prefix "C-SPC"
+
+    ;; General
+    "SPC" '(counsel-M-x :which-key "M-x")
+    ;; Buffer operations
+    "b" '(:ignore t :which-key "buffers")
+    "bb" '(ivy-switch-buffer :which-key "switch-buffer")
+    ;; File operations
+    "f" '(:ignore t :which-key "files")
+    "ff" '(counsel-find-file :which-key "find-file")
+    "fs" '(save-buffer :which-key "save-buffer")
+    ;; Help
+    "h"   '(:ignore t :which-key "help")
+    "hd"  '(:ignore t :which-key "help-describe")
+    "hdf" '(counsel-describe-function :which-key "describe-function")
+    "hdv" '(counsel-describe-key :which-key "describe-key")
+    ;; Exit operations
+    "q" '(:ignore t :which-key "quit")
+    "qq" '(save-buffers-kill-terminal :which-key "save-buffer-kill-terminal")
+    ;; Window navigation
+    "0" '(winum-select-window-0-or-10 :which-key "window-0-or-10")
+    "1" '(winum-select-window-1 :which-key "window-1")
+    "2" '(winum-select-window-2 :which-key "window-2")
+    "3" '(winum-select-window-3 :which-key "window-3")
+    "4" '(winum-select-window-4 :which-key "window-4")
+    "5" '(winum-select-window-5 :which-key "window-5")
+    "6" '(winum-select-window-6 :which-key "window-6")
+    "7" '(winum-select-window-7 :which-key "window-7")
+    "8" '(winum-select-window-8 :which-key "window-8")
+    "9" '(winum-select-window-0 :which-key "window-9")
+    "w" '(:ignore t :which-key "windows")
+    "w/" '(split-window-right :which-key "split-window-right")
+    "w-" '(split-window-below :which-key "split-window-below")
+    "wm" '(toggle-maximize-buffer :which-key "maximize-buffer")
+    "wd" '(delete-window :which-key "delete-window")
+))
+#+END_SRC
+
+* Configure UI
+** Theme
+#+BEGIN_SRC emacs-lisp
+(use-package dracula-theme :ensure t
+  :config
+  (load-theme 'dracula t))
+#+END_SRC
+** Font
+Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
+#+BEGIN_SRC emacs-lisp
+(if (condition-case nil
+        (x-list-fonts "Hack")
+      (error nil))
+    (progn
+      (add-to-list 'default-frame-alist '(font . "Hack-10"))
+      (set-face-attribute 'default nil :font "Hack-10")))
+#+END_SRC
+** Disable toolbar and menubar
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+#+END_SRC
+** Disable scrollbar
+#+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)
+#+END_SRC
+** Disable splash screen
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-message t)
+#+END_SRC
+** Disable the bell
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-funcion 'ignore)
+#+END_SRC
+** Ask for confirmation before quitting
+#+BEGIN_SRC emacs-lisp
+(setq confirm-kill-emacs 'y-or-n-p)
+#+END_SRC
+** Highlight the current line
+#+BEGIN_SRC emacs-lisp
+(when window-system
+  (global-hl-line-mode))
+#+END_SRC
+** Show ruler at 80
+
+* Startup behavior
+** Toggle fullscreen by default
+#+BEGIN_SRC emacs-lisp
+(toggle-frame-maximized)
+#+END_SRC
+** Empty scratch buffer
+#+BEGIN_SRC emacs-lisp
+(setq initial-scratch-message nil)
+#+END_SRC

@@ -2,8 +2,11 @@
 
 (defvar config-no-auto-update nil)
 (defvar config-load-path (file-name-directory (or load-file-name buffer-file-name)))
-(defvar config-org-files '("configuration.org" "cheatsheet.org"))
+(defvar config-org-files '("configuration.org"))
 (defvar config-use-fallback nil)
+
+;; Load util functions
+(load-file (concat config-load-path "util.el"))
 
 ;; Startup metrics
 (add-hook 'emacs-startup-hook
