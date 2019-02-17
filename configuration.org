@@ -39,36 +39,63 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 * Configure Evil mode
 #+BEGIN_SRC emacs-lisp
 (use-package evil :ensure t
-  :diminish evil-mode
-  :config
+  :init
   (evil-mode 1))
 #+END_SRC
 
 * Configure Ivy
 #+BEGIN_SRC emacs-lisp
 (use-package ivy :ensure t
+  :init
+  (ivy-mode 1)
   :config
-  (ivy-mode)
-  (setq ivy-use-virtual-buffers  t)
-  (setq enable-recrusive-minibuffers t))
+  (setq ivy-use-virtual-buffers  t
+        ivy-height 20
+        ivy-count-format "(%d/%d) "
+	enable-recrusive-minibuffers t)
+)
 #+END_SRC
 
 * Required packages
 ** =which-key= package key navigation
 #+BEGIN_SRC emacs-lisp
-(use-package which-key :ensure t)
+(use-package which-key :ensure t
+  :init
+  (which-key-mode)
+  :config
+  (setq which-key-sort-order 'which-key-key-order-alpha
+        which-key-side-window-max-width 0.333
+        which-key-idle-delay 0.4)
+)
 #+END_SRC
 ** =counsel= package for completion
 #+BEGIN_SRC emacs-lisp
 (use-package counsel
   :commands
-  (counsel-M-x))
+  (counsel-M-x
+   counsel-find-file
+   counsel-recentf
+   counsel-describe-function
+   counsel-describe-variable)
+)
 #+END_SRC
 ** =winum= to navigate between windows by number (SPC 1)
 #+BEGIN_SRC emacs-lisp
 (use-package winum :ensure t
   :config
   (winum-mode))
+#+END_SRC
+** =magit=
+#+BEGIN_SRC emacs-lisp
+(use-package magit :ensure t
+  :commands
+  (magit-status)
+)
+#+END_SRC   
+** =evil-magit=
+   This package requires both evil and magit.
+#+BEGIN_SRC emacs-lisp
+(use-package evil-magit :ensure t)
 #+END_SRC
 
 * Binding keys
@@ -85,15 +112,25 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
     ;; Buffer operations
     "b" '(:ignore t :which-key "buffers")
     "bb" '(ivy-switch-buffer :which-key "switch-buffer")
+    "bd" '(kill-buffer :which-key "kill-buffer")
+    ;; Comment
+    "c" '(:ignore t :which-key "comments")
+    "cl" '(comment-or-uncomment-region-or-line :which-key "comment-line")
     ;; File operations
     "f" '(:ignore t :which-key "files")
     "ff" '(counsel-find-file :which-key "find-file")
+    "fr" '(counsel-recentf :which-key "recent-files")
     "fs" '(save-buffer :which-key "save-buffer")
+    ;; Magit
+    "g" '(:ignore t :which-key "git")
+    "gs" '(magit-status :which-key "status")
     ;; Help
     "h"   '(:ignore t :which-key "help")
-    "hd"  '(:ignore t :which-key "help-describe")
-    "hdf" '(counsel-describe-function :which-key "describe-function")
-    "hdv" '(counsel-describe-key :which-key "describe-key")
+    "hf" '(counsel-describe-function :which-key "describe-function")
+    "hv" '(counsel-describe-variable :which-key "describe-variable")
+    ;; Search
+    "s" '(:ignore t :which-key "search")
+    "ss" '(swiper :which-key "swiper")
     ;; Exit operations
     "q" '(:ignore t :which-key "quit")
     "qq" '(save-buffers-kill-terminal :which-key "save-buffer-kill-terminal")
@@ -133,6 +170,13 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
       (add-to-list 'default-frame-alist '(font . "Hack-10"))
       (set-face-attribute 'default nil :font "Hack-10")))
 #+END_SRC
+** Powerline
+#+BEGIN_SRC emacs-lisp
+(use-package powerline :ensure t
+  :config
+  (powerline-default-theme)
+)
+#+END_SRC
 ** Disable toolbar and menubar
 #+BEGIN_SRC emacs-lisp
 (tool-bar-mode -1)
@@ -170,3 +214,4 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 #+BEGIN_SRC emacs-lisp
 (setq initial-scratch-message nil)
 #+END_SRC
+
