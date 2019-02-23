@@ -37,7 +37,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+END_SRC
 
 * Configure Evil mode
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package evil :ensure t
   :init
   (evil-mode 1))
@@ -66,6 +66,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   (setq which-key-sort-order 'which-key-key-order-alpha
         which-key-side-window-max-width 0.333
         which-key-idle-delay 0.4)
+  (which-key-setup-minibuffer)
 )
 #+END_SRC
 ** =counsel= package for completion
@@ -97,9 +98,16 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+BEGIN_SRC emacs-lisp
 (use-package evil-magit :ensure t)
 #+END_SRC
+** =restart-emacs=
+#+BEGIN_SRC emacs-lisp
+(use-package restart-emacs :ensure t
+  :commands
+  (restart-emacs)
+)
+#+END_SRC
 
 * Binding keys
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package general :ensure t
   :config
   (general-define-key
@@ -134,6 +142,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
     ;; Exit operations
     "q" '(:ignore t :which-key "quit")
     "qq" '(save-buffers-kill-terminal :which-key "save-buffer-kill-terminal")
+    "qr" '(restart-emacs :which-key "restart-emacs")
     ;; Window navigation
     "0" '(winum-select-window-0-or-10 :which-key "window-0-or-10")
     "1" '(winum-select-window-1 :which-key "window-1")
@@ -144,7 +153,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
     "6" '(winum-select-window-6 :which-key "window-6")
     "7" '(winum-select-window-7 :which-key "window-7")
     "8" '(winum-select-window-8 :which-key "window-8")
-    "9" '(winum-select-window-0 :which-key "window-9")
+    "9" '(winum-select-window-9 :which-key "window-9")
     "w" '(:ignore t :which-key "windows")
     "w/" '(split-window-right :which-key "split-window-right")
     "w-" '(split-window-below :which-key "split-window-below")
@@ -187,7 +196,7 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 (scroll-bar-mode -1)
 #+END_SRC
 ** Disable splash screen
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (setq inhibit-startup-message t)
 #+END_SRC
 ** Disable the bell
