@@ -44,19 +44,32 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+END_SRC
 
 * Configure Ivy
+** =ivy= 
 #+BEGIN_SRC emacs-lisp
 (use-package ivy :ensure t
   :init
   (ivy-mode 1)
   :config
   (setq ivy-use-virtual-buffers  t
-        ivy-height 20
+        ivy-height 20  ;; The number of candicate matches displayed in the minibuffer
         ivy-count-format "(%d/%d) "
 	enable-recrusive-minibuffers t)
 )
 #+END_SRC
+** =swiper=
+#+BEGIN_SRC emacs-lisp
+(use-package swiper :ensure t)
+#+END_SRC
+** =counsel=
+#+BEGIN_SRC emacs-lisp
+(use-package counsel :ensure t)
+#+END_SRC
 
 * Required packages
+** =avy=
+#+BEGIN_SRC emacs-lisp
+(use-package avy :ensure t)
+#+END_SRC
 ** =which-key= package key navigation
 #+BEGIN_SRC emacs-lisp
 (use-package which-key :ensure t
@@ -67,17 +80,6 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
         which-key-side-window-max-width 0.333
         which-key-idle-delay 0.4)
   (which-key-setup-minibuffer)
-)
-#+END_SRC
-** =counsel= package for completion
-#+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :commands
-  (counsel-M-x
-   counsel-find-file
-   counsel-recentf
-   counsel-describe-function
-   counsel-describe-variable)
 )
 #+END_SRC
 ** =winum= to navigate between windows by number (SPC 1)
@@ -91,6 +93,8 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 (use-package magit :ensure t
   :commands
   (magit-status)
+  :config
+  (setq magit-completing-read-function 'ivy-completing-read)
 )
 #+END_SRC   
 ** =evil-magit=
@@ -107,59 +111,23 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+END_SRC
 
 * Binding keys
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
 (use-package general :ensure t
   :config
   (general-define-key
-    :states '(normal visual insert emacs)
-    :prefix "SPC"
-    :non-normal-prefix "C-SPC"
-
-    ;; General
-    "SPC" '(counsel-M-x :which-key "M-x")
-    ;; Buffer operations
-    "b" '(:ignore t :which-key "buffers")
-    "bb" '(ivy-switch-buffer :which-key "switch-buffer")
-    "bd" '(kill-buffer :which-key "kill-buffer")
-    ;; Comment
-    "c" '(:ignore t :which-key "comments")
-    "cl" '(comment-or-uncomment-region-or-line :which-key "comment-line")
-    ;; File operations
-    "f" '(:ignore t :which-key "files")
-    "ff" '(counsel-find-file :which-key "find-file")
-    "fr" '(counsel-recentf :which-key "recent-files")
-    "fs" '(save-buffer :which-key "save-buffer")
-    ;; Magit
-    "g" '(:ignore t :which-key "git")
-    "gs" '(magit-status :which-key "status")
-    ;; Help
-    "h"   '(:ignore t :which-key "help")
-    "hf" '(counsel-describe-function :which-key "describe-function")
-    "hv" '(counsel-describe-variable :which-key "describe-variable")
-    ;; Search
-    "s" '(:ignore t :which-key "search")
-    "ss" '(swiper :which-key "swiper")
-    ;; Exit operations
-    "q" '(:ignore t :which-key "quit")
-    "qq" '(save-buffers-kill-terminal :which-key "save-buffer-kill-terminal")
-    "qr" '(restart-emacs :which-key "restart-emacs")
-    ;; Window navigation
-    "0" '(winum-select-window-0-or-10 :which-key "window-0-or-10")
-    "1" '(winum-select-window-1 :which-key "window-1")
-    "2" '(winum-select-window-2 :which-key "window-2")
-    "3" '(winum-select-window-3 :which-key "window-3")
-    "4" '(winum-select-window-4 :which-key "window-4")
-    "5" '(winum-select-window-5 :which-key "window-5")
-    "6" '(winum-select-window-6 :which-key "window-6")
-    "7" '(winum-select-window-7 :which-key "window-7")
-    "8" '(winum-select-window-8 :which-key "window-8")
-    "9" '(winum-select-window-9 :which-key "window-9")
-    "w" '(:ignore t :which-key "windows")
-    "w/" '(split-window-right :which-key "split-window-right")
-    "w-" '(split-window-below :which-key "split-window-below")
-    "wm" '(toggle-maximize-buffer :which-key "maximize-buffer")
-    "wd" '(delete-window :which-key "delete-window")
-))
+  "C-s" 'swiper
+  "M-x" 'counsel-M-x
+  "C-x C-f" 'counsel-find-file
+  "C-h f" 'counsel-describe-function
+  "C-h v" 'counsel-describe-variable
+  
+  ;; Jumping
+  "C-:" 'avy-goto-char
+  "C-;" 'avy-goto-char-2
+  "M-g f" 'avy-goto-line
+  "M-g w" 'avy-goto-word-1
+  )
+)
 #+END_SRC
 
 * Configure UI
@@ -211,6 +179,10 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 #+BEGIN_SRC emacs-lisp
 (when window-system
   (global-hl-line-mode))
+#+END_SRC
+** Show line number
+#+BEGIN_SRC emacs-lisp
+(global-display-line-numbers-mode)
 #+END_SRC
 ** Show ruler at 80
 
