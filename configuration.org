@@ -68,7 +68,10 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 * Required packages
 ** =avy=
 #+BEGIN_SRC emacs-lisp
-(use-package avy :ensure t)
+(use-package avy :ensure t
+  :init
+  (avy-setup-default)
+)
 #+END_SRC
 ** =which-key= package key navigation
 #+BEGIN_SRC emacs-lisp
