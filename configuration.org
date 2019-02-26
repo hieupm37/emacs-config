@@ -125,10 +125,11 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   "C-h v" 'counsel-describe-variable
   
   ;; Jumping
-  "C-:" 'avy-goto-char
-  "C-;" 'avy-goto-char-2
+  "M-g c" 'avy-goto-char
+  ;; "C-;" 'avy-goto-char-2
   "M-g f" 'avy-goto-line
   "M-g w" 'avy-goto-word-1
+  "M-g s" 'counsel-imenu
   )
 )
 #+END_SRC
