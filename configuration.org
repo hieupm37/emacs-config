@@ -73,6 +73,13 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   (avy-setup-default)
 )
 #+END_SRC
+** =company-mode= for text completion
+#+BEGIN_SRC emacs-lisp
+(use-package company :ensure t
+  :init
+  (add-hook 'after-init-hook 'global-company-mode)
+)
+#+END_SRC
 ** =which-key= package key navigation
 #+BEGIN_SRC emacs-lisp
 (use-package which-key :ensure t
@@ -113,6 +120,22 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 )
 #+END_SRC
 
+* C++ developement environment
+** =google-c-style=
+#+BEGIN_SRC emacs-lisp
+(use-package google-c-style :ensure t
+  :init
+  (add-hook 'c-mode-common-hook 'google-set-c-style)
+  (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+)
+#+END_SRC
+
+* GN developement environment
+#+BEGIN_SRC emacs-lisp
+(setq gn_file_path "extra/gn.el")
+(load-file (expand-file-name gn_file_path
+                            (file-name-directory (or load-file-name buffer-file-name))))
+#+END_SRC
 * Binding keys
 #+BEGIN_SRC emacs-lisp
 (use-package general :ensure t
@@ -176,7 +199,7 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 (setq ring-bell-funcion 'ignore)
 #+END_SRC
 ** Ask for confirmation before quitting
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (setq confirm-kill-emacs 'y-or-n-p)
 #+END_SRC
 ** Highlight the current line
