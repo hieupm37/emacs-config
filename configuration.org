@@ -44,7 +44,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+END_SRC
 
 * Configure Ivy
-** =ivy= 
+** =ivy=
 #+BEGIN_SRC emacs-lisp
 (use-package ivy :ensure t
   :init
@@ -106,7 +106,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   :config
   (setq magit-completing-read-function 'ivy-completing-read)
 )
-#+END_SRC   
+#+END_SRC
 ** =evil-magit=
    This package requires both evil and magit.
 #+BEGIN_SRC emacs-lisp
@@ -120,6 +120,33 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 )
 #+END_SRC
 
+* General config for development
+** Trim whitespaces before save
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+** =fill-column-indicator=
+#+BEGIN_SRC emacs-lisp
+(use-package fill-column-indicator :ensure t
+  :init
+  (progn
+    (setq fci-rule-width 1)
+    (setq fci-rule-color "#D0BF8F")
+    ;; Enable fci-mode as global minor mode
+    (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+    (global-fci-mode)
+  )
+)
+#+END_SRC
+** =whitespace= mode
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package whitespace :ensure t
+  :init
+  (global-whitespace-mode t)
+  :config
+  (setq whitespace-style '(face empty tabs lines-tail trailing))
+)
+#+END_SRC
 * C++ developement environment
 ** =google-c-style=
 #+BEGIN_SRC emacs-lisp
@@ -146,7 +173,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   "C-x C-f" 'counsel-find-file
   "C-h f" 'counsel-describe-function
   "C-h v" 'counsel-describe-variable
-  
+
   ;; Jumping
   "M-g c" 'avy-goto-char
   ;; "C-;" 'avy-goto-char-2
@@ -222,4 +249,3 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 #+BEGIN_SRC emacs-lisp
 (setq initial-scratch-message nil)
 #+END_SRC
-
