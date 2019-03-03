@@ -3,6 +3,7 @@
 
 * How to use
 
+
 * Add package repositories
 #+BEGIN_SRC emacs-lisp
 (require 'package)
@@ -10,13 +11,16 @@
 (package-initialize)
 #+END_SRC
 
+
 * Security
 Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html][Your Text Editor Is Malware]].
+
 ** Check TLS
 #+BEGIN_SRC emacs-lisp
 (setq tls-checktrust t)
 (setq gnutls-verify-error t)
 #+END_SRC
+
 
 * Automatic installing packages
 ** Install =use-package= and its dependencies if needed
@@ -29,12 +33,14 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
         (package-install package))))
   '(use-package diminish bind-key))
 #+END_SRC
+
 ** Trigger =use-package= and force the install of missing packages
 #+BEGIN_SRC emacs-lisp
 (eval-when-compile
   (require 'use-package))
 (setq use-package-always-ensure t)
 #+END_SRC
+
 
 * Configure Evil mode
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -44,6 +50,10 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+END_SRC
 
 * Configure Ivy
+** =flx= fuzzy matching
+#+BEGIN_SRC emacs-lisp
+(use-package flx :ensure t)
+#+END_SRC
 ** =ivy=
 #+BEGIN_SRC emacs-lisp
 (use-package ivy :ensure t
@@ -53,7 +63,10 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   (setq ivy-use-virtual-buffers  t
         ivy-height 20  ;; The number of candicate matches displayed in the minibuffer
         ivy-count-format "(%d/%d) "
-	enable-recrusive-minibuffers t)
+	enable-recrusive-minibuffers t
+        ivy-re-builders-alist '((swiper . ivy--regex-plus)
+                                (t      . ivy--regex-plus))
+  )
 )
 #+END_SRC
 ** =swiper=
@@ -77,7 +90,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 #+BEGIN_SRC emacs-lisp
 (use-package company :ensure t
   :init
-  (add-hook 'after-init-hook 'global-company-mode)
+   (add-hook 'after-init-hook 'global-company-mode)
 )
 #+END_SRC
 ** =which-key= package key navigation
@@ -147,7 +160,57 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   (setq whitespace-style '(face empty tabs lines-tail trailing))
 )
 #+END_SRC
+** =smartparens= for dealing with pairs
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens :ensure t
+  :init
+  (progn
+   (require 'smartparens-config)
+   (show-smartparens-global-mode +1)
+   (smartparens-global-mode 1)
+  )
+)
+#+END_SRC
+** =highlight-parentheses= by color
+#+BEGIN_SRC emacs-lisp
+(use-package highlight-parentheses :ensure t
+  :init
+  (global-highlight-parentheses-mode)
+)
+#+END_SRC
+** =sr-speedbar= to browser source tree
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package sr-speedbar :ensure t
+  :config
+  (setq sr-speedbar-skip-other-window-p t)
+)
+#+END_SRC
+** =projectile= for project management
+#+BEGIN_SRC emacs-lisp
+(use-package projectile :ensure t
+  :init
+   (projectile-global-mode)
+  :config
+   (setq projectile-completion-system 'ivy)
+)
+#+END_SRC
+
+
 * C++ developement environment
+** =company-c-headers= auto-completion C/C++ headers for company
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package company-c-headers :ensure t
+  :init
+   (add-to-list 'company-backends 'company-c-headers)
+  :config
+  (progn
+    (when (eq system-type 'darwin)
+      (add-to-list 'company-c-headers-path-system "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include/c++/4.2.1/")
+    )
+  )
+)
+#+END_SRC
+
 ** =google-c-style=
 #+BEGIN_SRC emacs-lisp
 (use-package google-c-style :ensure t
@@ -156,6 +219,21 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   (add-hook 'c-mode-common-hook 'google-make-newline-indent)
 )
 #+END_SRC
+
+** =smartparens=
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens :ensure t
+  :init
+  ;; when you press RET, the curly braces automatically
+  ;; add another newline
+  (sp-with-modes '(c-mode c++-mode)
+    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+    (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
+                                              ("* ||\n[i]" "RET")))
+  )
+)
+#+END_SRC
+
 
 * GN developement environment
 #+BEGIN_SRC emacs-lisp
