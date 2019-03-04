@@ -145,6 +145,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   (progn
     (setq fci-rule-width 1)
     (setq fci-rule-color "#D0BF8F")
+    (setq fci-rule-column 80)
     ;; Enable fci-mode as global minor mode
     (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
     (global-fci-mode)
