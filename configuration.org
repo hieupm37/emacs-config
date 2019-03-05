@@ -119,6 +119,7 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   :init
   (progn
     (setenv "SSH_ASKPASS" "git-gui--askpass")
+    (use-package ssh-agency :ensure t)
   )
   :config
   (setq magit-completing-read-function 'ivy-completing-read)
