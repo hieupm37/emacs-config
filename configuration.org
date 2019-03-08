@@ -322,7 +322,10 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 #+BEGIN_SRC emacs-lisp
 (global-display-line-numbers-mode)
 #+END_SRC
-** Show ruler at 80
+** Show current directory at frame title
+#+BEGIN_SRC emacs-lisp
+(setq frame-title-format '((:eval default-directory)))
+#+END_SRC
 
 * Startup behavior
 ** Toggle fullscreen by default
