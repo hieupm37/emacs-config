@@ -203,6 +203,10 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 
 
 * C++ developement environment
+** Treat *.h file as c++ file
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+#+END_SRC
 ** =company-c-headers= auto-completion C/C++ headers for company
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package company-c-headers :ensure t
@@ -259,7 +263,8 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
   "C-h v" 'counsel-describe-variable
 
   ;; Jumping
-  "M-g c" 'avy-goto-char
+  ;; "M-g c" 'avy-goto-char
+  "C-'" 'avy-goto-char-timer
   ;; "C-;" 'avy-goto-char-2
   "M-g f" 'avy-goto-line
   "M-g w" 'avy-goto-word-1
@@ -271,9 +276,9 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 * Configure UI
 ** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package dracula-theme :ensure t
+(use-package doom-themes :ensure t
   :config
-  (load-theme 'dracula t))
+  (load-theme 'doom-one t))
 #+END_SRC
 ** Font
 Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
@@ -326,6 +331,10 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 #+BEGIN_SRC emacs-lisp
 (setq frame-title-format '((:eval default-directory)))
 #+END_SRC
+** Turn off blink cursor mode
+#+BEGIN_SRC emacs-lisp
+(blink-cursor-mode 0)
+#+END_SRC
 
 * Startup behavior
 ** Toggle fullscreen by default
@@ -335,4 +344,11 @@ Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
 ** Empty scratch buffer
 #+BEGIN_SRC emacs-lisp
 (setq initial-scratch-message nil)
+#+END_SRC
+** Store all backup and autosave files in tmp directory
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 #+END_SRC
