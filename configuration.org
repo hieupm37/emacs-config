@@ -276,9 +276,9 @@ Getting hints from [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html
 * Configure UI
 ** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package doom-themes :ensure t
+(use-package zenburn-theme :ensure t
   :config
-  (load-theme 'doom-one t))
+  (load-theme 'zenburn t))
 #+END_SRC
 ** Font
 Use the Hack font from [[https://github.com/chrissimpkins/Hack][chrissimpkins]].
